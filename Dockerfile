@@ -43,6 +43,7 @@ RUN apt-get update \
         php7.2-cli \
         php7.2-curl \
         php7.2-pgsql \
+        ffmpeg \
         php-imagick \
     && ln -s /usr/sbin/php-fpm7.2 /usr/sbin/php-fpm \
     && rm -rf /var/lib/apt/lists/* /tmp/* \
