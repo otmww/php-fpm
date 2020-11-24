@@ -1,0 +1,44 @@
+FROM php:7.2-fpm
+
+# Set working directory
+ENV WORKDIR_PATH=/app
+WORKDIR $WORKDIR_PATH
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y build-essential cron curl locales zip unzip git ffmpeg
+
+# Install supervisord
+COPY --from=ochinchina/supervisord:latest /usr/local/bin/supervisord /usr/local/bin/supervisord
+
+# Install caddy
+COPY --from=caddy:2.0.0 /usr/bin/caddy /usr/local/bin/caddy
+
+# Install PHP extensions
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/bin/
+RUN install-php-extensions intl bcmath gd pdo_mysql pdo_pgsql opcache redis uuid exif pcntl zip
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Install composer & app dependencies
+COPY --from=composer:1.10.5 /usr/bin/composer /usr/local/bin/composer
+# TODO remove prestissimo when composer hits v2
+RUN composer global require hirak/prestissimo --no-plugins --no-scripts
+
+# Configure non-root user.
+ARG PUID=1000
+ENV PUID ${PUID}
+ARG PGID=1000
+ENV PGID ${PGID}
+
+RUN groupmod -o -g ${PGID} www-data && \
+    usermod -o -u ${PUID} -g www-data www-data
+
+
+COPY ./etc/php/7.2-supervisor/php/local.ini /usr/local/etc/php/conf.d/local.ini
+
+# Copy config files
+COPY --chown=www-data:www-data ./etc/php/7.2-supervisor /opt/config
+
+# Start app
+EXPOSE 80
+ENTRYPOINT ["/bin/bash"]
+CMD ["supervisord", "-c", "/opt/config/supervisor.conf"]
