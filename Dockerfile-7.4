@@ -33,7 +33,7 @@ ENV PGID ${PGID}
 RUN groupmod -o -g ${PGID} www-data && \
     usermod -o -u ${PUID} -g www-data www-data
 
-COPY ./etc/php/7.4/config/php/local.ini /usr/local/etc/php/conf.d/local.ini
+COPY ./etc/php/7.4/php/local.ini /usr/local/etc/php/conf.d/local.ini
 
 # Copy config files
 COPY --chown=www-data:www-data ./etc/php/7.4 /opt/config
