@@ -12,21 +12,21 @@ jobs:
       - run:
           name: build and push 7.1
           command: |
-            docker build -t $IMAGE_NAME:7.1 -f ./docker/app/Dockerfile-7.1 .
+            docker build -t $IMAGE_NAME:7.1 -f ./Dockerfile-7.1 .
             echo "$DOCKER_HUB_TOKEN" | docker login -u "$DOCKER_HUB_LOGIN" --password-stdin
             docker push $IMAGE_NAME:7.1
 
       - run:
           name: build and push 7.2
           command: |
-            docker build -t $IMAGE_NAME:7.2 -f ./docker/app/Dockerfile-7.2 .
+            docker build -t $IMAGE_NAME:7.2 -f ./Dockerfile-7.2 .
             echo "$DOCKER_HUB_TOKEN" | docker login -u "$DOCKER_HUB_LOGIN" --password-stdin
             docker push $IMAGE_NAME:7.2
 
       - run:
           name: build and push 7.2-supervisor
           command: |
-            docker build -t $IMAGE_NAME:7.2-supervisor -f ./docker/app/Dockerfile-7.2-supervisor .
+            docker build -t $IMAGE_NAME:7.2-supervisor -f ./Dockerfile-7.2-supervisor .
             echo "$DOCKER_HUB_TOKEN" | docker login -u "$DOCKER_HUB_LOGIN" --password-stdin
             docker push $IMAGE_NAME:7.2-supervisor
 
@@ -34,7 +34,7 @@ jobs:
       - run:
           name: build and push 7.4
           command: |
-            docker build -t $IMAGE_NAME:7.4 -f ./docker/app/Dockerfile-7.4 .
+            docker build -t $IMAGE_NAME:7.4 -f ./Dockerfile-7.4 .
             echo "$DOCKER_HUB_TOKEN" | docker login -u "$DOCKER_HUB_LOGIN" --password-stdin
             docker push $IMAGE_NAME:7.4
 
