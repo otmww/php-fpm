@@ -1,0 +1,51 @@
+version: 2.1
+executors:
+  docker-publisher:
+    environment:
+      IMAGE_NAME: otmwworldwide/php-fpm
+    machine: true
+jobs:
+  # Install composer dependencies
+  build:
+    executor: docker-publisher
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: build and push 7.1
+          command: |
+            docker build -t $IMAGE_NAME:7.1 -f ./docker/app/Dockerfile-7.1 .
+            echo "$DOCKER_HUB_TOKEN" | docker login -u "$DOCKER_HUB_LOGIN" --password-stdin
+            docker push $IMAGE_NAME:7.1
+
+      - run:
+          name: build and push 7.2
+          command: |
+            docker build -t $IMAGE_NAME:7.2 -f ./docker/app/Dockerfile-7.2 .
+            echo "$DOCKER_HUB_TOKEN" | docker login -u "$DOCKER_HUB_LOGIN" --password-stdin
+            docker push $IMAGE_NAME:7.2
+
+      - run:
+          name: build and push 7.2-supervisor
+          command: |
+            docker build -t $IMAGE_NAME:7.2-supervisor -f ./docker/app/Dockerfile-7.2-supervisor .
+            echo "$DOCKER_HUB_TOKEN" | docker login -u "$DOCKER_HUB_LOGIN" --password-stdin
+            docker push $IMAGE_NAME:7.2-supervisor
+
+
+      - run:
+          name: build and push 7.4
+          command: |
+            docker build -t $IMAGE_NAME:7.4 -f ./docker/app/Dockerfile-7.4 .
+            echo "$DOCKER_HUB_TOKEN" | docker login -u "$DOCKER_HUB_LOGIN" --password-stdin
+            docker push $IMAGE_NAME:7.4
+
+
+workflows:
+  version: 2
+  build-and-publish:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: master
