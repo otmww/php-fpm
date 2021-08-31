@@ -30,7 +30,6 @@ jobs:
             echo "$DOCKER_HUB_TOKEN" | docker login -u "$DOCKER_HUB_LOGIN" --password-stdin
             docker push $IMAGE_NAME:7.2-supervisor
 
-
       - run:
           name: build and push 7.4
           command: |
