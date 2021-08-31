@@ -23,12 +23,12 @@ jobs:
 #            echo "$DOCKER_HUB_TOKEN" | docker login -u "$DOCKER_HUB_LOGIN" --password-stdin
 #            docker push $IMAGE_NAME:7.2
 #
-#      - run:
-#          name: build and push 7.2-supervisor
-#          command: |
-#            docker build -t $IMAGE_NAME:7.2-supervisor -f ./Dockerfile-7.2-supervisor .
-#            echo "$DOCKER_HUB_TOKEN" | docker login -u "$DOCKER_HUB_LOGIN" --password-stdin
-#            docker push $IMAGE_NAME:7.2-supervisor
+      - run:
+          name: build and push 7.2-supervisor
+          command: |
+            docker build -t $IMAGE_NAME:7.2-supervisor -f ./Dockerfile-7.2-supervisor .
+            echo "$DOCKER_HUB_TOKEN" | docker login -u "$DOCKER_HUB_LOGIN" --password-stdin
+            docker push $IMAGE_NAME:7.2-supervisor
 
 
       - run:
